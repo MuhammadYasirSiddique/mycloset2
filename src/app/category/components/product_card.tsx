@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 
 const Product_Card: FC<{ item: Product }> = ({ item }) => {
-  const imageURL = urlForImage(item.image).url();
-  console.log(imageURL);
+  // const imageURL = urlForImage(item.image).url();
+  // console.log(imageURL);
   return (
     <>
       <div className="my-5">
@@ -34,10 +34,12 @@ const Product_Card: FC<{ item: Product }> = ({ item }) => {
           {item.price}
         </p>
         <div>
-          <Button size="sm">
-            <ShoppingBag />
-            Add to Cart
-          </Button>
+          <Link href={`/product/${item.id}`}>
+            <Button size="sm">
+              <ShoppingBag />
+              Add to Cart
+            </Button>
+          </Link>
         </div>
         <Toaster position="top-right" reverseOrder={true} />
       </div>

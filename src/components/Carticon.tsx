@@ -1,10 +1,11 @@
-// import { useCartContext } from "../components/CartContext";
 import React from "react";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/store";
+import { Toaster } from "react-hot-toast";
 
 const CartIcon = () => {
-  //   const { getTotalQuantity } = useCartContext();
+  const totalqty = useAppSelector((state) => state.cart.totalQty);
 
   const [fix, setFix] = useState(false);
   function setFixed() {
@@ -29,7 +30,6 @@ const CartIcon = () => {
     <div>
       <a
         href="/cart"
-        // onClick={}
         className={` text-xl px-4 ml-auto lg:mx-4 md:px-4 block py-2 ${
           fix ? "hover:text-white" : " hover:text-black"
         }`}
@@ -43,10 +43,11 @@ const CartIcon = () => {
         >
           <ShoppingCart color={`${fix ? "black" : "indigo"}`} size={20} />
           <span className=" top-0 -right-1 absolute rounded-full bg-red-500 h-4 w-4 text-center text-xs text-white">
-            {0}
+            {totalqty ? totalqty : 0}
           </span>
         </div>
       </a>
+      <Toaster position="top-center" reverseOrder={true} />
     </div>
   );
 };

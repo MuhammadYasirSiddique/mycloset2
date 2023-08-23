@@ -5,6 +5,8 @@ import Promotion from "@/components/promotion";
 import React from "react";
 import Features from "@/components/Features";
 
+import ReduxProvider from "@/components/utils/ReduxProvider";
+
 const Home = () => {
   return (
     <div>

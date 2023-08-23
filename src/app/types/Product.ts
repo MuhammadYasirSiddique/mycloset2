@@ -1,20 +1,18 @@
 export interface cart_Product {
-  id: string;
+  _id: string;
+
   title: string;
-  description: string;
-  details: string;
-  color: string;
-  size: string[];
-  image: any;
-  price: number;
-  category: string;
-  user_id: string;
+  unitPrice: number;
   qty: number;
+  productPrice: number;
+  size: string;
+  image: any;
+  // userId: string;
 }
 
 export interface Product {
   qty: number;
-  urlForImage: any;
+
   id: string;
   title: string;
   description: string;

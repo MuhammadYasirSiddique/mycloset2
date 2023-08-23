@@ -1,15 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
-// import { FiMenu } from "react-icons/fi";
-// import { RxCross2 } from "react-icons/rx";
+
 import { Menu, X } from "lucide-react";
 import { Link, Search } from "lucide-react";
 import CartIcon from "./Carticon";
+import { ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "@/redux/store";
+import { Toaster } from "react-hot-toast";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [fix, setFix] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const totalqty = useAppSelector((state) => state.cart.totalQty);
 
   function setFixed() {
     if (window.scrollY >= 1) {
@@ -66,24 +69,25 @@ const Navbar = () => {
           </span>
         </a>
       </div>
-
-      {open ? (
-        <X
-          className={`md:hidden block h-6 w-6 cursor-pointer mx-auto ${
-            fix ? "hover:text-white" : " hover:text-black"
-          } `}
-          onClick={() => setOpen(!open)}
-        />
-      ) : (
-        <Menu
-          className={`md:hidden block h-6 w-6 cursor-pointer mx-auto ${
-            fix ? "hover:text-white" : " hover:text-black"
-          } `}
-          onClick={() => setOpen(!open)}
-        />
-      )}
-
-      <nav
+      <div className="md:hidden ml-2">
+        {" "}
+        {open ? (
+          <X
+            className={`md:hidden block h-6 w-6 cursor-pointer mx-auto ${
+              fix ? "hover:text-white" : " hover:text-black"
+            } `}
+            onClick={() => setOpen(!open)}
+          />
+        ) : (
+          <Menu
+            className={`md:hidden block h-6 w-6 cursor-pointer mx-auto ${
+              fix ? "hover:text-white" : " hover:text-black"
+            } `}
+            onClick={() => setOpen(!open)}
+          />
+        )}
+      </div>
+      <div
         className={`
                   ${open ? "block" : "hidden"}
                       w-full md:flex md:itmes-center md:w-auto
@@ -155,9 +159,32 @@ const Navbar = () => {
               Sign in
             </a>
           </li>
-          <CartIcon />
         </ul>
-      </nav>
+        {/* <CartIcon /> */}
+
+        <div>
+          <a
+            href="/cart"
+            className={` text-xl px-4 ml-auto lg:mx-4 md:px-4 block py-2 ${
+              fix ? "hover:text-white" : " hover:text-black"
+            }`}
+          >
+            <div
+              className={`${
+                fix
+                  ? "bg-gray-300 p-2 flex h-8 w-8 rounded-full relative items-center justify-center"
+                  : "bg-cyan-500 p-2 flex h-8 w-8 rounded-full relative items-center justify-center "
+              }`}
+            >
+              <ShoppingCart color={`${fix ? "black" : "indigo"}`} size={20} />
+              <span className=" top-0 -right-1 absolute rounded-full bg-red-500 h-4 w-4 text-center text-xs text-white">
+                {totalqty ? totalqty : 0}
+              </span>
+            </div>
+          </a>
+          <Toaster position="top-center" reverseOrder={true} />
+        </div>
+      </div>
     </div>
   );
 };
