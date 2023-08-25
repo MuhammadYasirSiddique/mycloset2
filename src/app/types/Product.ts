@@ -1,16 +1,16 @@
 export interface cart_Product {
   _id: string;
-
   title: string;
   unitPrice: number;
   qty: number;
   productPrice: number;
   size: string;
-  image: any;
-  // userId: string;
+  image: string;
+  user_id: string;
 }
 
 export interface Product {
+  user_id: string;
   qty: number;
 
   id: string;

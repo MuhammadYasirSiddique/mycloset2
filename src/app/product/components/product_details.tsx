@@ -8,9 +8,10 @@ import Link from "next/link";
 import { useAppDispatch } from "@/redux/store";
 import { cartAction } from "@/redux/features/cartSlice";
 
-import { Product } from "@/app/types/Product";
+import { Product, cart_Product } from "@/app/types/Product";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { json } from "stream/consumers";
 
 const Product_Details: FC<{ item: Product }> = ({ item }) => {
   const [selectedSize, setSelectedSize] = useState("");
@@ -31,6 +32,60 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
     }
   };
 
+  // const getDataFromDb = async () => {
+  //   const res = await fetch(`api/cart/${item.user_id}`);
+
+  //   if (!res) {
+  //     throw new Error("Failed to Fetch Data");
+  //   }
+  // };
+
+  const addToCartDb = async () => {
+    const res = await fetch(`/api/cart`, {
+      method: "POST",
+      body: JSON.stringify({
+        user_id: "abc123",
+        product_id: item.id,
+        product_name: item.title,
+        qty: quantity,
+        image: urlForImage(item.image).url(),
+        size: selectedSize,
+        price: item.price,
+        total_price: item.price * quantity,
+      }),
+    });
+  };
+
+  // const handleCart = async () => {
+  //   try {
+  //     const cartData = await getDataFromDb();
+
+  //     const existingItem = cartData.cartItems.find(
+  //       (item: cart_Product) => item._id === item._id
+  //     );
+
+  //     if (existingItem) {
+  //       const newQty = existingItem.qty + item.qty;
+  //       const newTotalPrice = item.price * newQty;
+
+  //       const res = await fetch(`/api/cart`, {
+  //         method: "PUT",
+  //         body: JSON.stringify({
+  //           product_id: item.id,
+  //           qty: newQty,
+  //           price: newTotalPrice,
+  //         }),
+  //       });
+  //       if (!res.ok) {
+  //         throw new Error("Failed to fetch data");
+  //       }
+  //     } else {
+  //       await addToCartDb();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
   const handleAddToCart = () => {
     if (!selectedSize) {
       toast.error("Please select a size before adding to cart", {
@@ -47,7 +102,14 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
       productPrice: item.price * quantity,
       image: item.image,
       size: selectedSize,
+      user_id: item.user_id,
     };
+
+    toast.promise(addToCartDb(), {
+      loading: `Adding ${item.title} to Cart DB`,
+      success: `Added  ${quantity} ${item.title} of "${selectedSize}" to the cart`,
+      error: "Failed to Add to Cart DB",
+    });
 
     dispatch(
       cartAction.addToCart({
@@ -55,12 +117,6 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
         quantity: quantity,
         size: selectedSize,
       })
-    );
-    toast.success(
-      `Added  ${quantity} ${item.title} of "${selectedSize}" to the cart`,
-      {
-        duration: 2500,
-      }
     );
   };
 
