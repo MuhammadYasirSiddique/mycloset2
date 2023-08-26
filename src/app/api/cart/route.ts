@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db, cartTable, addToCart } from "@/lib/drizzle";
+import { db, cartTable, addToCart, Cart } from "@/lib/drizzle";
 import { and, eq } from "drizzle-orm";
-import { v4 as uuid } from "uuid";
-import { cookies } from "next/headers";
-import { urlForImage } from "../../../../sanity/lib/image";
-import { error } from "console";
+import { cart_Product } from "@/app/types/Product";
 
 export const POST = async (request: NextRequest) => {
   const req: addToCart = await request.json();
@@ -70,3 +67,33 @@ export const PUT = async (request: NextRequest) => {
     return NextResponse.json({ message: error }, { status: 500 });
   }
 };
+
+// import { v4 as uuid } from "uuid";
+// import { cookies } from "next/headers";
+// import { urlForImage } from "../../../../sanity/lib/image";
+// import { error } from "console";
+
+// export const GET = async (req: NextRequest) => {
+//   try {
+//     const res: Cart[] = await db
+//       .select()
+//       .from(cartTable)
+//       .where(eq(cartTable.user_id, "abc123"));
+
+//     const cartItems = res.map((item) => ({
+//       _id: item.product_id,
+//       title: item.product_name,
+//       unitPrice: item.price,
+//       qty: item.qty,
+//       productPrice: item.total_price,
+//       size: item.size,
+//       image: item.image,
+//       user_id: item.user_id,
+//     }));
+
+//     return NextResponse.json({ cartItems });
+//   } catch (error) {
+//     console.log(error);
+//     return NextResponse.json({ message: error }, { status: 500 });
+//   }
+// };

@@ -5,7 +5,7 @@ export interface cart_Product {
   qty: number;
   productPrice: number;
   size: string;
-  image: string;
+  image: any;
   user_id: string;
 }
 

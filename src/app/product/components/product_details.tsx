@@ -13,7 +13,11 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { json } from "stream/consumers";
 
-const Product_Details: FC<{ item: Product }> = ({ item }) => {
+type IProps = {
+  product: Product;
+};
+
+const Product_Details = (item: IProps) => {
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState(1);
   const dispatch = useAppDispatch();
@@ -36,22 +40,24 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
   //   const res = await fetch(`api/cart/${item.user_id}`);
 
   //   if (!res) {
+  //     console.log("Failed to fetch data");
   //     throw new Error("Failed to Fetch Data");
   //   }
+  //   console.log(res);
   // };
 
   const addToCartDb = async () => {
     const res = await fetch(`/api/cart`, {
       method: "POST",
       body: JSON.stringify({
-        user_id: "abc123",
-        product_id: item.id,
-        product_name: item.title,
+        user_id: "uid123",
+        product_id: item.product.id,
+        product_name: item.product.title,
         qty: quantity,
-        image: urlForImage(item.image).url(),
+        image: urlForImage(item.product.image).url(),
         size: selectedSize,
-        price: item.price,
-        total_price: item.price * quantity,
+        price: item.product.price,
+        total_price: item.product.price * quantity,
       }),
     });
   };
@@ -95,19 +101,19 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
     }
 
     const cartProduct = {
-      _id: item.id,
-      title: item.title,
-      unitPrice: item.price,
+      _id: item.product.id,
+      title: item.product.title,
+      unitPrice: item.product.price,
       qty: quantity,
-      productPrice: item.price * quantity,
-      image: item.image,
+      productPrice: item.product.price * quantity,
+      image: item.product.image,
       size: selectedSize,
-      user_id: item.user_id,
+      user_id: item.product.user_id,
     };
 
     toast.promise(addToCartDb(), {
-      loading: `Adding ${item.title} to Cart DB`,
-      success: `Added  ${quantity} ${item.title} of "${selectedSize}" to the cart`,
+      loading: `Adding ${item.product.title} to Cart DB`,
+      success: `Added  ${quantity} ${item.product.title} of "${selectedSize}" to the cart`,
       error: "Failed to Add to Cart DB",
     });
 
@@ -124,24 +130,24 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
     <main>
       <div className="">
         <div className="flex flex-col lg:flex-row justify-center items-center lg:gap-x-6">
-          <div className="" key={item.id}>
+          <div className="" key={item.product.id}>
             <Image
               className=""
-              src={urlForImage(item.image).url()}
-              alt={item.title}
+              src={urlForImage(item.product.image).url()}
+              alt={item.product.title}
               width={300}
               height={500}
             />
           </div>
           <div>
             <div>
-              <p>Product Code: {item.id} </p>
-              <p>Product Name: {item.title}</p>
-              <p>Descruption: {item.description} </p>
-              <p>Color: {item.color}</p>
+              <p>Product Code: {item.product.id} </p>
+              <p>Product Name: {item.product.title}</p>
+              <p>Descruption: {item.product.description} </p>
+              <p>Color: {item.product.color}</p>
               <div className="flex items-center">
                 <p>Size: </p>
-                {item.size.map((s: string, index: number) => (
+                {item.product.size.map((s: string, index: number) => (
                   <>
                     <div className="mx-2" key={s}>
                       <button
@@ -157,7 +163,7 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
                 ))}
               </div>
               <div></div>
-              <p> Price:- Rs.{item.price}</p>
+              <p> Price:- Rs.{item.product.price}</p>
               <br />
               <div>
                 {/* Counter  */}
@@ -194,11 +200,11 @@ const Product_Details: FC<{ item: Product }> = ({ item }) => {
             </div>
           </div>
         </div>
-        <p>{item.category.category}</p>
+        <p>{item.product.category.category}</p>
 
         <div className="justify-center items-center mx-2 lg:mx-32">
           <p>Product Details:</p>
-          <p>Product Details: {item.details}</p>
+          <p>Product Details: {item.product.details}</p>
         </div>
       </div>
     </main>

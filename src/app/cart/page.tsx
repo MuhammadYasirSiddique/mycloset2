@@ -22,7 +22,7 @@ const CartPage: React.FC = () => {
       <h1 className="text-2xl font-semibold mb-4">Your Cart</h1>
       {cartItems.length > 0 ? (
         <div className="flex flex-wrap-reverse md:flex-nowrap">
-          <div className="lg:w-3/4 w-full max-w-screen-lg rounded-lg bg-slate-100 shadow-lg overflow-x-auto border">
+          <div className="lg:w-3/4 w-full max-w-screen-lg rounded-lg h-fit bg-slate-100 shadow-lg overflow-x-auto border">
             <div className="grid grid-cols-8 text-center font-semibold py-2 border ">
               <span className="col-span-1">Code</span>
               <span className="col-span-1">Image</span>

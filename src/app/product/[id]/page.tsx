@@ -30,7 +30,7 @@ export default async function Home({ params }: { params: { id: string } }) {
       <div className="mt-10">
         {data.map((item: Product) => (
           <div key={item.id}>
-            <Product_Details item={item} />
+            <Product_Details product={item} />
           </div>
         ))}{" "}
       </div>
