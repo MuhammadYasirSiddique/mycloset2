@@ -24,13 +24,14 @@ const getProductData = async (id: string) => {
 
 export default async function Home({ params }: { params: { id: string } }) {
   const data: Product[] = await getProductData(params.id);
+  const user_id = "uid123";
 
   return (
     <>
       <div className="mt-10">
         {data.map((item: Product) => (
           <div key={item.id}>
-            <Product_Details product={item} />
+            <Product_Details product={item} userId={user_id} />
           </div>
         ))}{" "}
       </div>

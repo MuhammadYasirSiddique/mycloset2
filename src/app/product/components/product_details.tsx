@@ -4,17 +4,16 @@ import { FC } from "react";
 import Image from "next/image";
 import { urlForImage } from "../../../../sanity/lib/image";
 import toast, { Toaster } from "react-hot-toast";
-import Link from "next/link";
 import { useAppDispatch } from "@/redux/store";
 import { cartAction } from "@/redux/features/cartSlice";
 
 import { Product, cart_Product } from "@/app/types/Product";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
-import { json } from "stream/consumers";
 
 type IProps = {
   product: Product;
+  userId: string;
 };
 
 const Product_Details = (item: IProps) => {
@@ -36,21 +35,23 @@ const Product_Details = (item: IProps) => {
     }
   };
 
-  // const getDataFromDb = async () => {
-  //   const res = await fetch(`api/cart/${item.user_id}`);
+  // handle request data
+  const GetDataFromDB = async () => {
+    const res = await fetch(`http://localhost:3000/api/cart/${item.userId}`);
 
-  //   if (!res) {
-  //     console.log("Failed to fetch data");
-  //     throw new Error("Failed to Fetch Data");
-  //   }
-  //   console.log(res);
-  // };
+    if (!res.ok) {
+      throw new Error("Failed to Fetch Data");
+    }
 
-  const addToCartDb = async () => {
-    const res = await fetch(`/api/cart`, {
+    const data = await res.json();
+    return data;
+  };
+
+  const AddToCart = async () => {
+    const res = await fetch(`http://localhost:3000/api/cart`, {
       method: "POST",
       body: JSON.stringify({
-        user_id: "uid123",
+        user_id: item.userId,
         product_id: item.product.id,
         product_name: item.product.title,
         qty: quantity,
@@ -60,39 +61,43 @@ const Product_Details = (item: IProps) => {
         total_price: item.product.price * quantity,
       }),
     });
+    if (!res.ok) {
+      throw new Error("Failed to add Data");
+    }
   };
 
-  // const handleCart = async () => {
-  //   try {
-  //     const cartData = await getDataFromDb();
+  const handleCart = async () => {
+    try {
+      const cartData = await GetDataFromDB();
 
-  //     const existingItem = cartData.cartItems.find(
-  //       (item: cart_Product) => item._id === item._id
-  //     );
+      const existingItem = cartData.cartItems.find(
+        (cartItem: cart_Product) => cartItem._id === item.product.id
+      );
 
-  //     if (existingItem) {
-  //       const newQty = existingItem.qty + item.qty;
-  //       const newTotalPrice = item.price * newQty;
+      if (existingItem) {
+        const newQty = existingItem.qty + quantity;
+        const newTotalPrice = existingItem.unitPrice * newQty;
 
-  //       const res = await fetch(`/api/cart`, {
-  //         method: "PUT",
-  //         body: JSON.stringify({
-  //           product_id: item.id,
-  //           qty: newQty,
-  //           price: newTotalPrice,
-  //         }),
-  //       });
-  //       if (!res.ok) {
-  //         throw new Error("Failed to fetch data");
-  //       }
-  //     } else {
-  //       await addToCartDb();
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
+        const res = await fetch(`http://localhost:3000/api/cart`, {
+          method: "PUT",
+          body: JSON.stringify({
+            product_id: item.product.id,
+            qty: newQty,
+            price: newTotalPrice,
+          }),
+        });
+        if (!res.ok) {
+          throw new Error("Failed to update DATA");
+        }
+      } else {
+        await AddToCart();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const handleAddToCart = () => {
+  const addToCart = () => {
     if (!selectedSize) {
       toast.error("Please select a size before adding to cart", {
         duration: 2500,
@@ -111,7 +116,7 @@ const Product_Details = (item: IProps) => {
       user_id: item.product.user_id,
     };
 
-    toast.promise(addToCartDb(), {
+    toast.promise(handleCart(), {
       loading: `Adding ${item.product.title} to Cart DB`,
       success: `Added  ${quantity} ${item.product.title} of "${selectedSize}" to the cart`,
       error: "Failed to Add to Cart DB",
@@ -192,7 +197,7 @@ const Product_Details = (item: IProps) => {
                 name="add to cart"
                 className="text-lg"
                 type="button"
-                onClick={() => handleAddToCart()}
+                onClick={() => addToCart()}
               >
                 <ShoppingCart />
                 Add to Cart

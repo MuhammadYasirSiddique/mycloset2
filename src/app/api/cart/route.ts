@@ -36,7 +36,7 @@ export const POST = async (request: NextRequest) => {
 };
 
 export const PUT = async (request: NextRequest) => {
-  const user_id = "abc123";
+  const user_id = "uid123";
 
   const data: addToCart = await request.json();
 
