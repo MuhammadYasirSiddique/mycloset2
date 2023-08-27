@@ -68,6 +68,39 @@ export const PUT = async (request: NextRequest) => {
   }
 };
 
+export const DELETE = async (request: NextRequest) => {
+  const user_id = "uid123";
+  const url = request.nextUrl;
+  try {
+    if (url.searchParams.has("product_id") && user_id) {
+      const product_id = url.searchParams.get("product_id");
+
+      const res = await db
+        .delete(cartTable)
+        .where(
+          and(
+            eq(cartTable.user_id, user_id),
+            eq(cartTable.product_id, product_id as string)
+          )
+        )
+        .returning();
+      return NextResponse.json(
+        { message: `Item removed from Cart` },
+        { status: 200 }
+      );
+    } else {
+      if (url.searchParams.has("product_id")) {
+        throw new Error("Login required");
+      } else {
+        throw new Error("Product ID required");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: error }, { status: 405 });
+  }
+};
+
 // import { v4 as uuid } from "uuid";
 // import { cookies } from "next/headers";
 // import { urlForImage } from "../../../../sanity/lib/image";
