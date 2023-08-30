@@ -5,6 +5,7 @@ import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/store";
 import { Toaster } from "react-hot-toast";
+import { UserButton, auth } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -147,17 +148,26 @@ const Navbar = () => {
               </div>
             </form>
           )}
-          <li>
-            <a
-              href="#education "
-              className={` md:px-4 block py-2 ${
-                fix ? "hover:text-white" : " hover:text-black"
-              }`}
-            >
-              Sign in
-            </a>
-          </li>
+          {!auth ? (
+            // User is not authenticated, show Sign in link
+            <li>
+              <a
+                href="sign-in"
+                className={` md:px-4 block py-2 ${
+                  fix ? "hover:text-white" : " hover:text-black"
+                }`}
+              >
+                Sign in
+              </a>
+            </li>
+          ) : (
+            // User is authenticated, show UserButton component
+            <li>
+              <UserButton afterSignOutUrl="/" />
+            </li>
+          )}
         </ul>
+
         {/* <CartIcon /> */}
 
         <div

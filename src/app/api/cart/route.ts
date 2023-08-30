@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { db, cartTable, addToCart, Cart } from "@/lib/drizzle";
 import { and, eq } from "drizzle-orm";
 import { cart_Product } from "@/app/types/Product";
+import { auth } from "@clerk/nextjs";
 
 export const POST = async (request: NextRequest) => {
   const req: addToCart = await request.json();
 
   try {
     if (req) {
+      const clerkUser = await auth(); // Wait for the promise to resolve
+      const clerkUid = clerkUser; // Extract the clerkUid from the user object
       const res = await db
         .insert(cartTable)
         .values({
@@ -21,7 +24,7 @@ export const POST = async (request: NextRequest) => {
           total_price: req.total_price,
         })
         .returning();
-
+      // console.log(clerkUid);
       return NextResponse.json(
         { message: "Item(s) Added to DB" },
         { status: 200 }
@@ -46,7 +49,7 @@ export const PUT = async (request: NextRequest) => {
         .update(cartTable)
         .set({
           qty: data.qty,
-          total_price: data.qty * data.price,
+          total_price: data.price,
         })
         .where(
           and(
@@ -55,6 +58,7 @@ export const PUT = async (request: NextRequest) => {
           )
         )
         .returning();
+
       return NextResponse.json(
         { message: "Item in Cart updated" },
         { status: 200 }
