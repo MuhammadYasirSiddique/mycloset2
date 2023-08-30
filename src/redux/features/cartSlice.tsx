@@ -61,6 +61,28 @@ export const cartSlice = createSlice({
       }
     },
 
+    updateQuantity(state, action) {
+      const { productId, newQty } = action.payload;
+      const cartItem = state.items.find((item) => item._id === productId);
+
+      if (cartItem) {
+        // Update the quantity of the cart item
+        cartItem.qty = newQty;
+
+        // Update total quantity and total amount
+        state.totalQty = state.items.reduce(
+          (total, item) => total + item.qty,
+          0
+        );
+        state.totalAmt = state.items.reduce(
+          (total, item) => total + item.qty * item.unitPrice,
+          0
+        );
+      }
+    },
+
+    // ... Other actions ...
+
     removeProduct(state: CartState, action: PayloadAction<string>) {
       const productId = action.payload;
 

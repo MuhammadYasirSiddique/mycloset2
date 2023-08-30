@@ -1,8 +1,6 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import { Link, Search } from "lucide-react";
-import CartIcon from "./Carticon";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/redux/store";
@@ -73,14 +71,14 @@ const Navbar = () => {
         {" "}
         {open ? (
           <X
-            className={`md:hidden block h-6 w-6 cursor-pointer mx-auto ${
+            className={`md:hidden block h-6 w-6 cursor-pointer mx-5 ${
               fix ? "hover:text-white" : " hover:text-black"
             } `}
             onClick={() => setOpen(!open)}
           />
         ) : (
           <Menu
-            className={`md:hidden block h-6 w-6 cursor-pointer mx-auto ${
+            className={`md:hidden block h-6 w-6 cursor-pointer mx-5 ${
               fix ? "hover:text-white" : " hover:text-black"
             } `}
             onClick={() => setOpen(!open)}
@@ -162,10 +160,14 @@ const Navbar = () => {
         </ul>
         {/* <CartIcon /> */}
 
-        <div>
+        <div
+          className={`flex items-center justify-center md:ml-auto ${
+            isSmallScreen ? "w-full mt-2 md:mt-0" : ""
+          }`}
+        >
           <a
             href="/cart"
-            className={` text-xl px-4 ml-auto lg:mx-4 md:px-4 block py-2 ${
+            className={` text-xl px-4 lg:mx-4 md:px-4 block py-2 ${
               fix ? "hover:text-white" : " hover:text-black"
             }`}
           >
