@@ -6,15 +6,14 @@ import { auth } from "@clerk/nextjs";
 
 export const POST = async (request: NextRequest) => {
   const req: addToCart = await request.json();
+  const userName = auth();
 
   try {
     if (req) {
-      const clerkUser = await auth(); // Wait for the promise to resolve
-      const clerkUid = clerkUser; // Extract the clerkUid from the user object
       const res = await db
         .insert(cartTable)
         .values({
-          user_id: req.user_id,
+          user_id: userName.userId as string,
           product_id: req.product_id,
           product_name: req.product_name,
           qty: req.qty,
@@ -24,9 +23,9 @@ export const POST = async (request: NextRequest) => {
           total_price: req.total_price,
         })
         .returning();
-      // console.log(clerkUid);
+      // console.log(userName);
       return NextResponse.json(
-        { message: "Item(s) Added to DB" },
+        { message: `Item(s) Added to DB for ` },
         { status: 200 }
       );
     } else {
@@ -39,10 +38,10 @@ export const POST = async (request: NextRequest) => {
 };
 
 export const PUT = async (request: NextRequest) => {
-  const user_id = "uid123";
+  // const user_id = "uid123";
 
   const data: addToCart = await request.json();
-
+  const userName = auth();
   try {
     if (data) {
       await db
@@ -53,12 +52,12 @@ export const PUT = async (request: NextRequest) => {
         })
         .where(
           and(
-            eq(cartTable.user_id, user_id),
+            eq(cartTable.user_id, userName.userId as string),
             eq(cartTable.product_id, data.product_id)
           )
         )
-        .returning();
-
+        .returning(),
+        console.log(userName);
       return NextResponse.json(
         { message: "Item in Cart updated" },
         { status: 200 }
@@ -73,17 +72,18 @@ export const PUT = async (request: NextRequest) => {
 };
 
 export const DELETE = async (request: NextRequest) => {
-  const user_id = "uid123";
+  // const user_id = "uid123";
   const url = request.nextUrl;
+  const userName = auth();
   try {
-    if (url.searchParams.has("product_id") && user_id) {
+    if (url.searchParams.has("product_id") && (userName.userId as string)) {
       const product_id = url.searchParams.get("product_id");
 
       const res = await db
         .delete(cartTable)
         .where(
           and(
-            eq(cartTable.user_id, user_id),
+            eq(cartTable.user_id, userName.userId as string),
             eq(cartTable.product_id, product_id as string)
           )
         )

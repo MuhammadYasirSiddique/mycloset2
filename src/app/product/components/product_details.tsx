@@ -89,7 +89,7 @@ const Product_Details = (item: IProps) => {
         if (!res.ok) {
           throw new Error("Failed to update DATA");
         }
-        console.log(`Existing PRice ${existingItem.unitPrice}`);
+        console.log(`Existing Price ${existingItem.unitPrice}`);
         console.log(`New Qty ${newTotalPrice}`);
       } else {
         await AddToCart();

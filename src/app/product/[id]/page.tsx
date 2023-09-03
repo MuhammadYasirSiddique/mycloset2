@@ -1,6 +1,8 @@
 import { client } from "@/lib/SanityClient";
 import Product_Details from "@/app/product/components/product_details";
 import { Product } from "@/app/types/Product";
+import { userAgent } from "next/server";
+import { auth } from "@clerk/nextjs";
 
 const getProductData = async (id: string) => {
   const res = await client.fetch(
@@ -24,14 +26,18 @@ const getProductData = async (id: string) => {
 
 export default async function Home({ params }: { params: { id: string } }) {
   const data: Product[] = await getProductData(params.id);
-  const user_id = "uid123";
+  // const user_id = "uid123";
+  const userName = auth();
 
   return (
     <>
       <div className="mt-10">
         {data.map((item: Product) => (
           <div key={item.id}>
-            <Product_Details product={item} userId={user_id} />
+            <Product_Details
+              product={item}
+              userId={userName.userId as string}
+            />
           </div>
         ))}{" "}
       </div>
