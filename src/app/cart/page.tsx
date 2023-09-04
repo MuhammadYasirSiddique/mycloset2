@@ -1,15 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Product, cart_Product } from "@/app/types/Product";
+import { cart_Product } from "@/app/types/Product";
 import Image from "next/image";
 import { urlForImage } from "../../../sanity/lib/image";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
-import { CloudFog, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Provider } from "react-redux";
 import { cartAction } from "@/redux/features/cartSlice";
+// import { useDisptach } from "react-redux";
+import { removeProduct } from "@/redux/features/cartSlice";
 
 interface Props {
   cartItem: cart_Product;
@@ -17,12 +19,14 @@ interface Props {
 
 const CartPage = ({ cartItem }: Props) => {
   const [loading, setLoading] = useState(false);
-  const [qty, setQty] = useState();
+  const [qty, setQty] = useState(0);
   const dispatch = useAppDispatch();
+  // const dispatchCart = useDisptach();
 
   const cartItems: Array<cart_Product> = useAppSelector(
     (state) => state.cart.items
   );
+  console.log(cartItems);
 
   const totalItems = useAppSelector((state) => state.cart.totalQty);
   const totalAmount = useAppSelector((state) => state.cart.totalAmt);
@@ -40,6 +44,7 @@ const CartPage = ({ cartItem }: Props) => {
 
       if (response.ok) {
         // Item removed successfully, you can update your cart state or UI here
+        dispatch(removeProduct(productId));
         console.log("Item removed from cart");
       } else {
         console.log("Failed to remove item from cart");
@@ -122,13 +127,13 @@ const CartPage = ({ cartItem }: Props) => {
                           <div className="grid grid-cols-8 gap-2 px-2 text-center items-center justify-center">
                             <span className="col-span-1">{item._id}</span>
                             <span className="col-span-1">
-                              <Image
+                              {/* <Image
                                 className="py-2"
                                 src={urlForImage(item.image).url()}
                                 alt={item.title}
                                 width={50}
                                 height={50}
-                              />
+                              /> */}
                             </span>
                             <span className="col-span-1">{item.title}</span>
                             <span className="col-span-1">{item.size}</span>

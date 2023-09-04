@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db, cartTable, addToCart, Cart } from "@/lib/drizzle";
 import { and, eq } from "drizzle-orm";
-import { cart_Product } from "@/app/types/Product";
 import { auth } from "@clerk/nextjs";
 
 export const POST = async (request: NextRequest) => {
@@ -23,7 +22,7 @@ export const POST = async (request: NextRequest) => {
           total_price: req.total_price,
         })
         .returning();
-      // console.log(userName);
+
       return NextResponse.json(
         { message: `Item(s) Added to DB for ` },
         { status: 200 }
@@ -38,8 +37,6 @@ export const POST = async (request: NextRequest) => {
 };
 
 export const PUT = async (request: NextRequest) => {
-  // const user_id = "uid123";
-
   const data: addToCart = await request.json();
   const userName = auth();
   try {
@@ -56,8 +53,8 @@ export const PUT = async (request: NextRequest) => {
             eq(cartTable.product_id, data.product_id)
           )
         )
-        .returning(),
-        console.log(userName);
+        .returning();
+
       return NextResponse.json(
         { message: "Item in Cart updated" },
         { status: 200 }
@@ -72,7 +69,6 @@ export const PUT = async (request: NextRequest) => {
 };
 
 export const DELETE = async (request: NextRequest) => {
-  // const user_id = "uid123";
   const url = request.nextUrl;
   const userName = auth();
   try {

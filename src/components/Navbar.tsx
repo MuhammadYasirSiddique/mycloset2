@@ -3,15 +3,17 @@
 import { Menu, X } from "lucide-react";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "@/redux/store";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Toaster } from "react-hot-toast";
 import { UserButton, auth } from "@clerk/nextjs";
+import { fetchData } from "@/redux/features/cartSlice";
 
-const Navbar = () => {
+const Navbar = ({ userId }: { userId: string }) => {
   const [open, setOpen] = useState(false);
   const [fix, setFix] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const totalqty = useAppSelector((state) => state.cart.totalQty);
+  const dispatch = useAppDispatch();
 
   function setFixed() {
     if (window.scrollY >= 1) {
@@ -34,6 +36,10 @@ const Navbar = () => {
       window.removeEventListener("resize", handleScreenSize);
     };
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchData(userId));
+  }, [dispatch, userId]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -162,7 +168,7 @@ const Navbar = () => {
             </li>
           ) : (
             // User is authenticated, show UserButton component
-            <li>
+            <li className="flex items-center justify-center md:ml-auto">
               <UserButton afterSignOutUrl="/" />
             </li>
           )}

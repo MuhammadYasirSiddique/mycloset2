@@ -1,15 +1,14 @@
 "use client";
 import React, { Key, ReactNode, useState, useEffect } from "react";
-import { FC } from "react";
 import Image from "next/image";
 import { urlForImage } from "../../../../sanity/lib/image";
 import toast, { Toaster } from "react-hot-toast";
 import { useAppDispatch } from "@/redux/store";
 import { cartAction } from "@/redux/features/cartSlice";
-
 import { Product, cart_Product } from "@/app/types/Product";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
+import { redirectToSignIn } from "@clerk/nextjs";
 
 type IProps = {
   product: Product;
@@ -100,39 +99,40 @@ const Product_Details = (item: IProps) => {
   };
 
   const addToCart = () => {
-    if (!selectedSize) {
-      toast.error("Please select a size before adding to cart", {
-        duration: 2500,
-      });
-      return;
-    }
+    if (item.userId) {
+      if (!selectedSize) {
+        toast.error("Please select a size before adding to cart", {
+          duration: 2500,
+        });
+        return;
+      }
 
-    const cartProduct = {
-      _id: item.product.id,
-      title: item.product.title,
-      unitPrice: item.product.price,
-      qty: quantity,
-      productPrice: item.product.price * quantity,
-      image: item.product.image,
-      size: selectedSize,
-      user_id: item.product.user_id,
-    };
-
-    toast.promise(handleCart(), {
-      loading: `Adding ${item.product.title} to Cart DB`,
-      success: `Added  ${quantity} ${item.product.title} of "${selectedSize}" to the cart`,
-      error: "Failed to Add to Cart DB",
-    });
-
-    dispatch(
-      cartAction.addToCart({
-        cart_product: cartProduct,
-        quantity: quantity,
+      const cartProduct = {
+        _id: item.product.id,
+        title: item.product.title,
+        unitPrice: item.product.price,
+        qty: quantity,
+        productPrice: item.product.price * quantity,
+        image: item.product.image,
         size: selectedSize,
-      })
-    );
-  };
+        user_id: item.product.user_id,
+      };
 
+      toast.promise(handleCart(), {
+        loading: `Adding ${item.product.title} to Cart DB`,
+        success: `Added  ${quantity} ${item.product.title} of "${selectedSize}" to the cart`,
+        error: "Failed to Add to Cart DB",
+      });
+
+      dispatch(
+        cartAction.addToCart({
+          cart_product: cartProduct,
+          quantity: quantity,
+          size: selectedSize,
+        })
+      );
+    }
+  };
   return (
     <main>
       <div className="">

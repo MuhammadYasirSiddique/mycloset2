@@ -1,5 +1,5 @@
 "use client";
-import React, { Key, ReactNode } from "react";
+import React, { Key, ReactNode, useState } from "react";
 import { FC } from "react";
 import Image from "next/image";
 import { urlForImage } from "../../../../sanity/lib/image";
@@ -8,10 +8,15 @@ import Link from "next/link";
 import { Product } from "@/app/types/Product";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
+import Loading from "./Loading";
 
 const Product_Card: FC<{ item: Product }> = ({ item }) => {
-  // const imageURL = urlForImage(item.image).url();
-  // console.log(imageURL);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  if (isLoading) {
+    // Show a loading indicator here, for example, a spinner or a loading image
+    return <Loading />;
+  }
   return (
     <>
       <div className="my-5">

@@ -7,17 +7,28 @@ interface CartState {
   items: Array<cart_Product>;
   totalQty: number;
   totalAmt: number;
+  isLoading: boolean;
+  error: any;
 }
 
 const initialState: CartState = {
   items: [],
   totalAmt: 0,
   totalQty: 0,
+  isLoading: false,
+  error: null,
 };
 
 export const fetchData = createAsyncThunk(
   "cart/fetchdata",
-  async (userId: string) => {}
+  async (userId: string) => {
+    const res = await fetch(`http://localhost:3000/api/cart/${userId}`);
+    if (!res.ok) {
+      console.log("Failed to Fetch DATA");
+    }
+    const data = await res.json();
+    return data;
+  }
 );
 
 export const cartSlice = createSlice({
@@ -86,10 +97,11 @@ export const cartSlice = createSlice({
     removeProduct(state: CartState, action: PayloadAction<string>) {
       const productId = action.payload;
 
+      // Use filter to create a new array without the product to remove
       state.items = state.items.filter((item) => item._id !== productId);
 
+      // Calculate totalQty and totalAmt based on the updated state
       state.totalQty = state.items.reduce((total, item) => total + item.qty, 0);
-
       state.totalAmt = state.items.reduce(
         (total, item) => total + item.productPrice,
         0
@@ -113,8 +125,27 @@ export const cartSlice = createSlice({
       }
     },
   },
+
+  extraReducers: (builder) => {
+    builder.addCase(fetchData.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchData.fulfilled, (state, action) => {
+      const { cartItems, totalQty, totalPrice } = action.payload;
+      state.items = cartItems;
+      state.totalQty = totalQty;
+      state.totalAmt = totalPrice;
+      state.isLoading = false;
+    });
+
+    builder.addCase(fetchData.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    });
+  },
 });
 
 export const cartAction = cartSlice.actions;
+export const { removeProduct } = cartSlice.actions;
 
 export default cartSlice.reducer;
