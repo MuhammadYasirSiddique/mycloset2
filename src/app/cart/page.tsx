@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { cart_Product } from "@/app/types/Product";
+import { Product, cart_Product } from "@/app/types/Product";
 import Image from "next/image";
 import { urlForImage } from "../../../sanity/lib/image";
 import { Button } from "@/components/ui/button";
@@ -13,11 +13,11 @@ import { cartAction } from "@/redux/features/cartSlice";
 // import { useDisptach } from "react-redux";
 import { removeProduct } from "@/redux/features/cartSlice";
 
-interface Props {
+type Props = {
   cartItem: cart_Product;
-}
+};
 
-const CartPage = ({ cartItem }: Props) => {
+const CartPage = ({ cartItem }: any) => {
   const [loading, setLoading] = useState(false);
   const [qty, setQty] = useState(0);
   const dispatch = useAppDispatch();
@@ -26,7 +26,7 @@ const CartPage = ({ cartItem }: Props) => {
   const cartItems: Array<cart_Product> = useAppSelector(
     (state) => state.cart.items
   );
-  console.log(cartItems);
+  // console.log(typeof cartItems);
 
   const totalItems = useAppSelector((state) => state.cart.totalQty);
   const totalAmount = useAppSelector((state) => state.cart.totalAmt);
@@ -35,12 +35,9 @@ const CartPage = ({ cartItem }: Props) => {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/cart?product_id=${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`/api/cart?product_id=${productId}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         // Item removed successfully, you can update your cart state or UI here
@@ -61,7 +58,7 @@ const CartPage = ({ cartItem }: Props) => {
 
     try {
       if (newQty) {
-        const res = await fetch("http://localhost:3000/api/cart", {
+        const res = await fetch("/api/cart", {
           method: "PUT",
           body: JSON.stringify({
             product_id: cartItem._id,
@@ -108,7 +105,7 @@ const CartPage = ({ cartItem }: Props) => {
         <div className="flex flex-wrap-reverse md:flex-nowrap">
           <div className="lg:w-3/4 w-full max-w-screen-lg rounded-lg h-fit bg-slate-100 shadow-lg overflow-x-auto border">
             <div className="grid grid-cols-8 text-center font-semibold py-2 border ">
-              <span className="col-span-1">Code</span>
+              {/* <span className="col-span-1">Code</span> */}
               <span className="col-span-1">Image</span>
               <span className="col-span-1">Item Title</span>
               <span className="col-span-1">Size</span>
@@ -116,6 +113,7 @@ const CartPage = ({ cartItem }: Props) => {
               <span className="col-span-1">Price</span>
               <span className="col-span-1">Amount</span>
               <span className="col-span-1">Action</span>
+              <span className="col-span-1">Edit</span>
             </div>
             <div className="border">
               {cartItems.map((item) => {
@@ -125,25 +123,33 @@ const CartPage = ({ cartItem }: Props) => {
                       <div>
                         <div>
                           <div className="grid grid-cols-8 gap-2 px-2 text-center items-center justify-center">
-                            <span className="col-span-1">{item._id}</span>
+                            {/* <span className="col-span-1">{item._id}</span> */}
                             <span className="col-span-1">
-                              {/* <Image
+                              <Image
                                 className="py-2"
-                                src={urlForImage(item.image).url()}
+                                src={item.image}
                                 alt={item.title}
                                 width={50}
                                 height={50}
-                              /> */}
+                              />
                             </span>
                             <span className="col-span-1">{item.title}</span>
                             <span className="col-span-1">{item.size}</span>
-                            <span className="col-span-1">{item.qty}</span>{" "}
-                            {/* <button
-                              className="bg-gray-200 rounded-r-lg  w-8 h-8 mx-2 border"
-                              onClick={increment}
-                            >
-                              +
-                            </button> */}
+                            <div className="flex items-center justify-center">
+                              {/* <button
+                                className="bg-cyan-600 text-white rounded-l-lg  w-8 h-8 mx-2 border"
+                                // onClick={() =>()}
+                              >
+                                -
+                              </button> */}
+                              <span className="col-span-1">{item.qty}</span>{" "}
+                              {/* <button
+                                className="bg-cyan-600 text-white rounded-r-lg  w-8 h-8 mx-2 border"
+                                // onClick={() =>()}
+                              >
+                                +
+                              </button> */}
+                            </div>
                             <span className="col-span-1">{item.unitPrice}</span>
                             <span className="col-span-1">
                               {item.productPrice}
@@ -178,12 +184,12 @@ const CartPage = ({ cartItem }: Props) => {
                 }
               })}{" "}
               <div className="grid grid-cols-8 text-center text-lg font-sans font-bold border">
-                <p className="col-span-6 py-2">TOAL ORDER AMOUNT</p>
+                <p className="col-span-5 py-2">TOAL ORDER AMOUNT</p>
                 <span>{totalOrderAmount}</span>
               </div>
             </div>
           </div>
-          <div className="md:mx-2 mb-5 mt-10 rounded-lg bg-slate-100 w-full md:w-1/4 shadow-lg border h-fit">
+          <div className="md:mx-2 mb-5   rounded-lg bg-slate-100 w-full md:w-1/4 shadow-lg border h-fit">
             <h1 className="text-center pt-2 font-semibold"> Cart Summary</h1>
             <div className="bg-slate-200 w-full h-0.5 mt-2"></div>
             <div className="my-5 mx-4 flex justify-between items-center">

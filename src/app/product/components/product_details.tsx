@@ -36,7 +36,7 @@ const Product_Details = (item: IProps) => {
 
   // handle request data
   const GetDataFromDB = async () => {
-    const res = await fetch(`http://localhost:3000/api/cart/${item.userId}`);
+    const res = await fetch(`/api/cart/${item.userId}`);
 
     if (!res.ok) {
       throw new Error("Failed to Fetch Data");
@@ -47,7 +47,7 @@ const Product_Details = (item: IProps) => {
   };
 
   const AddToCart = async () => {
-    const res = await fetch(`http://localhost:3000/api/cart`, {
+    const res = await fetch(`/api/cart`, {
       method: "POST",
       body: JSON.stringify({
         user_id: item.userId,
@@ -77,7 +77,7 @@ const Product_Details = (item: IProps) => {
         const newQty = existingItem.qty + quantity;
         const newTotalPrice = existingItem.unitPrice * newQty;
 
-        const res = await fetch(`http://localhost:3000/api/cart`, {
+        const res = await fetch(`/api/cart`, {
           method: "PUT",
           body: JSON.stringify({
             product_id: item.product.id,
