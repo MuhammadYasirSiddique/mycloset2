@@ -22,7 +22,7 @@ const initialState: CartState = {
 export const fetchData = createAsyncThunk(
   "cart/fetchdata",
   async (userId: string) => {
-    const res = await fetch(`http://localhost:3000/api/cart/${userId}`);
+    const res = await fetch(`/api/cart/${userId}`);
     if (!res.ok) {
       console.log("Failed to Fetch DATA");
     }
