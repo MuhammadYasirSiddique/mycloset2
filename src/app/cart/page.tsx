@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import { cartAction } from "@/redux/features/cartSlice";
 // import { useDisptach } from "react-redux";
 import { removeProduct } from "@/redux/features/cartSlice";
+import CheckOut from "./components/CheckOut";
 
 type Props = {
   cartItem: cart_Product;
@@ -200,8 +201,8 @@ const CartPage = ({ cartItem }: any) => {
               <span className="text-left">Total Amount</span>
               <span className="text-right">{totalOrderAmount}</span>
             </div>
-            <div className="text-center my-10">
-              <Button>Check Out</Button>
+            <div className="flex items-center justify-center">
+              <CheckOut products={cartItems} />
             </div>
           </div>
         </div>
@@ -239,8 +240,8 @@ const CartPage = ({ cartItem }: any) => {
               <span className="text-left">Total Amount</span>
               <span className="text-right">{totalAmount}</span>
             </div>
-            <div className="text-center my-10">
-              <Button>Check Out</Button>
+            <div className="flex items-center justify-center">
+              <CheckOut products={cartItems} />
             </div>
           </div>
         </div>
