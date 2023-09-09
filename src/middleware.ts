@@ -5,6 +5,7 @@ export default authMiddleware({
     "/category/:path*",
     "/cart",
     "/api/cart/null",
+    "/api/webhooks",
     // "/product/:path*",
     // "/api/cart/:path*",
     // "/api/cart",
