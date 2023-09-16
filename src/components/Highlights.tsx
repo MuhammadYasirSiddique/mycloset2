@@ -84,16 +84,19 @@ export default class AdaptiveHeight extends Component {
             {products.map((product) => (
               <div
                 key={product.id}
-                className="p-10 product-card hover:scale-110 object-cover transition-transform duration-300 "
+                className="p-10 product-card hover:scale-110 object-cover
+                 transition-transform duration-300"
               >
-                <Image
-                  src={product.src}
-                  height={380}
-                  width={380}
-                  alt={product.alt}
-                />
-                <h1 className="text-3xl">{product.alt}</h1>
-                <p>{product.price} </p>
+                <div className="">
+                  <Image
+                    src={product.src}
+                    height={380}
+                    width={380}
+                    alt={product.alt}
+                  />
+                  <h1 className="text-3xl">{product.alt}</h1>
+                  <p>{product.price} </p>
+                </div>
               </div>
             ))}
           </Slider>

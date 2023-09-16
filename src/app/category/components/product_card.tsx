@@ -19,22 +19,21 @@ const Product_Card: FC<{ item: Product }> = ({ item }) => {
   }
   return (
     <>
-      <div className="my-5">
-        <Link href={`/product/${item.id}`}>
-          <h1 className="text-md font-bold" key={item.id}>
-            <Image
-              className=" "
-              src={urlForImage(item.image).url()}
-              alt={item.title}
-              width={300}
-              height={500}
-            />
-          </h1>
-        </Link>
-        <p>Item Code: {item.id}</p>
-        <p>{item.title}</p>
+      <div className="my-5 transform transition-transform hover:scale-105">
+        <h1 className="text-md font-bold" key={item.id}>
+          <Image
+            className=" "
+            src={urlForImage(item.image).url()}
+            alt={item.title}
+            width={300}
+            height={500}
+          />
+        </h1>
 
-        <p>
+        <p className="text-slate-500 ">Item Code: {item.id}</p>
+        <p className="text-cyan-950 py-2 font-bold text-2xl">{item.title}</p>
+
+        <p className="text-slate-500 ">
           <strong>Price Rs.</strong>
           {item.price}
         </p>
@@ -42,7 +41,7 @@ const Product_Card: FC<{ item: Product }> = ({ item }) => {
           <Link href={`/product/${item.id}`}>
             <Button size="sm">
               <ShoppingBag />
-              Add to Cart
+              Click for Details
             </Button>
           </Link>
         </div>

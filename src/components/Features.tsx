@@ -1,121 +1,76 @@
-// import React from "react";
-// import Image from "next/image";
-// import { Button } from "./ui/button";
-
-// const Features = () => {
-//   return (
-//     <div className="">
-//       <div className="grid grid-cols-2 h-screen my-10 mx-20">
-//         <div className="relative flex justify-center items-center">
-//           <div className="absolute top-0 left-0 right-0 bottom-0 text-gray-100 text-9xl flex justify-center items-center pointer-events-none">
-//             Different from Others
-//           </div>
-//           <div className=" relative grid grid-cols-2 ">
-//             <div className="p-4">
-//               <h1 className="text-2xl">Using Good Quality Materials</h1> <br />
-//               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-//             </div>
-//             <div className="p-4">
-//               <h1 className="text-2xl">100% Handmade Products</h1> <br />
-//               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-//             </div>
-//             <div className="p-4">
-//               <h1 className="text-2xl">Modern Fashion Design</h1> <br />
-//               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-//             </div>
-//             <div className="p-4">
-//               <h1 className="text-2xl">Discount for Bulk Orders</h1> <br />
-//               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="flex justify-center items-center relative">
-//           <div className="p-4">
-//             <div className="rounded-full bg-slate-200 w-80 h-80 absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-
-//             <Image
-//               src="/event3.webp"
-//               width="2000"
-//               height="2000"
-//               alt="product"
-//               className="relative z-10"
-//             ></Image>
-//           </div>
-//           <div className="p-4 text-justify">
-//             <p>
-//               This piece is ethically crafted in our small family-owned workshop
-//               in Peru with unmatched attention to detail and care. The Natural
-//               color is the actual natural color of the fiber, undyed and 100%
-//               traceable.
-//             </p>
-//             <br /> <br />
-//             <Button className="mx-4 whitespace-nowrap">Get Started</Button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Features;
-
 import React from "react";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import Wrapper from "@/Wraper/wraper";
 
 const Features = () => {
   return (
-    <div className="container mx-auto px-4 md:px-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 my-10 gap-8">
-        <div className="relative flex justify-center items-center">
-          <div className="absolute top-0 left-0 right-0 bottom-0 text-gray-100 text-5xl md:text-9xl flex justify-center items-center pointer-events-none">
-            Different from Others
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4">
-              <h1 className="text-2xl">Using Good Quality Materials</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-            <div className="p-4">
-              <h1 className="text-2xl">100% Handmade Products</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-            <div className="p-4">
-              <h1 className="text-2xl">Modern Fashion Design</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-            <div className="p-4">
-              <h1 className="text-2xl">Discount for Bulk Orders</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-            </div>
-          </div>
+    <Wrapper>
+      <div className="grid grid-cols-2 gap-5 mt-20 min-h-screen">
+        <div className="col-span-2 col-start-1 h-full w-full  xl:col-start-2">
+          <h3 className="text-[2.5rem] sm:text-[2.75rem] tracking-[0.03em] leading-[3rem] font-bold">
+            Unique and Authentic Vintage Designer Jewellery
+          </h3>
         </div>
-
-        <div className="flex justify-center items-center relative">
-          <div className="p-4">
-            <div className="rounded-full bg-slate-200 w-64 h-64 md:w-80 md:h-80 absolute -z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-            <Image
-              src="/event3.webp"
-              width="2000"
-              height="2000"
-              alt="product"
-              className="relative z-10"
-            ></Image>
+        <div className="col-span-2 grid grid-cols-2 gap-5">
+          <div className="relative col-span-2 h-full w-full  xl:col-span-1">
+            <div className="grid grid-cols-2 gap-10 mr-20">
+              <div className=" ">
+                <h4 className="text-2xl font-bold">
+                  Using Good Quality Materials
+                </h4>
+                <p className="mt-5">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+              </div>
+              <div className=" ">
+                <h4 className="text-2xl font-bold">100% Handmade Products</h4>
+                <p className="mt-5">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+              </div>
+              <div className=" ">
+                <h4 className="text-2xl font-bold">Lorem, ipsum dolor.</h4>
+                <p className="mt-5">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+              </div>
+              <div className=" ">
+                <h4 className="text-2xl font-bold">Lorem, ipsum dolor.</h4>
+                <p className="mt-5">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </p>
+              </div>
+            </div>
+            <div className="absolute inset-0 overflow-hidden text-[5rem] sm:text-8xl  font-bold tracking-widest text-gray-200/70 -z-[10]">
+              Different From Others
+            </div>
           </div>
-          <div className="p-4 text-justify">
-            <p>
-              This piece is ethically crafted in our small family-owned workshop
-              in Peru with unmatched attention to detail and care. The Natural
-              color is the actual natural color of the fiber, undyed and 100%
-              traceable.
-            </p>
-            <br /> <br />
-            <Button className="mx-4 whitespace-nowrap">Get Started</Button>
+          <div className="col-span-2   xl:col-span-1">
+            <div className="flex flex-col h-full w-full items-center justify-center gap-5 sm:flex-row">
+              <div className="basis-1/2  w-full flex justify-center ">
+                <Image
+                  src="/F-p1.webp"
+                  alt=""
+                  width={250}
+                  height={250}
+                  className="shadow-xl"
+                />
+              </div>
+              <div className="flex flex-col justify-center items-center gap-5  basis-1/2 ">
+                <p className="tracking-wider leading-6">
+                  This piece is ethically crafted in our small family-owned
+                  workshop in Peru with unmatched attention to detail and care.
+                  The Natural color is the actual natural color of the fiber,
+                  undyed and 100% traceable.
+                </p>
+                <Button>See All Products</Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

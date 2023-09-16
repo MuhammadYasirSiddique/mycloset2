@@ -5,7 +5,7 @@ import { Twitter, Facebook, Linkedin } from "lucide-react";
 
 const Contact = () => {
   return (
-    <div className="flex justify-center items-center mb-10 mx-10 lg:mx-20 h-full">
+    <div className="flex justify-center items-center mb-10 mx-10 lg:mx-20 min-h-screen">
       <div className="  text-center md:grid md:grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="mb-6 md:mb-0 col-span-2 lg:col-span-2">
           <h1 className="font-serif text-2xl">

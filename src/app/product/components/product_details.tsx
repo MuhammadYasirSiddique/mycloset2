@@ -9,6 +9,7 @@ import { Product, cart_Product } from "@/app/types/Product";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { redirectToSignIn } from "@clerk/nextjs";
+import Info from "./Informaition/info";
 
 type IProps = {
   product: Product;
@@ -148,12 +149,17 @@ const Product_Details = (item: IProps) => {
           </div>
           <div>
             <div>
-              <p>Product Code: {item.product.id} </p>
-              <p>Product Name: {item.product.title}</p>
-              <p>Descruption: {item.product.description} </p>
-              <p>Color: {item.product.color}</p>
-              <div className="flex items-center">
-                <p>Size: </p>
+              <p className="text-slate-500">Code: {item.product.id} </p>
+              <p className="text-cyan-950 py-2 font-bold text-2xl">
+                {item.product.title}
+              </p>
+              <p className="text-blue-800 py-2 ">{item.product.description} </p>
+              <p className=" py-2">
+                Color(s):{" "}
+                <span className=" font-bold ">{item.product.color}</span>
+              </p>
+              <div className="flex items-center py-2">
+                <p className="text-slate-800">Size(s) : </p>
                 {item.product.size.map((s: string, index: number) => (
                   <>
                     <div className="mx-2" key={s}>
@@ -169,10 +175,8 @@ const Product_Details = (item: IProps) => {
                   </>
                 ))}
               </div>
-              <div></div>
-              <p> Price:- Rs.{item.product.price}</p>
-              <br />
-              <div>
+
+              <div className="py-2">
                 {/* Counter  */}
                 <div className="flex items-center ">
                   <p>Quantity: </p>
@@ -195,6 +199,9 @@ const Product_Details = (item: IProps) => {
               <br />
             </div>
             <div>
+              <p className="font-bold"> Price:- Rs.{item.product.price}</p>
+            </div>
+            <div>
               <Button
                 name="add to cart"
                 className="text-lg"
@@ -209,11 +216,12 @@ const Product_Details = (item: IProps) => {
         </div>
         <p>{item.product.category.category}</p>
 
-        <div className="justify-center items-center mx-2 lg:mx-32">
+        {/* <div className="justify-center items-center mx-2 lg:mx-32">
           <p>Product Details:</p>
           <p>Product Details: {item.product.details}</p>
-        </div>
+        </div> */}
       </div>
+      <Info />
     </main>
   );
 };

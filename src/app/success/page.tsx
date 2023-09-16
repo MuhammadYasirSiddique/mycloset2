@@ -2,8 +2,8 @@ import React from "react";
 
 const Page = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white rounded-lg shadow-lg p-8">
+    <div className=" flex min-h-screen items-center justify-center">
+      <div className="bg-slate-100 rounded-lg shadow-lg p-8 ">
         <h1 className="text-2xl font-bold mb-4">Thank You for Your Order!</h1>
         <p>Your order has been successfully placed.</p>
         <p>Shipping will be made as per your selected plan:</p>
