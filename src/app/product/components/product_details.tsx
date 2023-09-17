@@ -2,7 +2,7 @@
 import React, { Key, ReactNode, useState, useEffect } from "react";
 import Image from "next/image";
 import { urlForImage } from "../../../../sanity/lib/image";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useAppDispatch } from "@/redux/store";
 import { cartAction } from "@/redux/features/cartSlice";
 import { Product, cart_Product } from "@/app/types/Product";
@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { redirectToSignIn } from "@clerk/nextjs";
 import Info from "./Informaition/info";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type IProps = {
   product: Product;
@@ -103,7 +105,7 @@ const Product_Details = (item: IProps) => {
     if (item.userId) {
       if (!selectedSize) {
         toast.error("Please select a size before adding to cart", {
-          duration: 2500,
+          autoClose: 2500,
         });
         return;
       }
@@ -120,9 +122,9 @@ const Product_Details = (item: IProps) => {
       };
 
       toast.promise(handleCart(), {
-        loading: `Adding ${item.product.title} to Cart DB`,
-        success: `Added  ${quantity} ${item.product.title} of "${selectedSize}" to the cart`,
-        error: "Failed to Add to Cart DB",
+        pending: `Adding ${item.product.title} to Cart`,
+        success: `Added  ${quantity} ${item.product.title} of "${selectedSize}" size, to the cart`,
+        error: "Failed to Add to Cart",
       });
 
       dispatch(
@@ -211,6 +213,7 @@ const Product_Details = (item: IProps) => {
                 <ShoppingCart />
                 Add to Cart
               </Button>
+              <ToastContainer />
             </div>
           </div>
         </div>

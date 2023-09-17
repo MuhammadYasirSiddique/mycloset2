@@ -1,25 +1,29 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import React from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState, useEffect } from "react";
 
-function App() {
-  const notify = () => {
-    toast.error("This is a ERROR notification!", {
-      position: toast.POSITION.TOP_RIGHT,
-      autoClose: 2000, // Close the notification after 3 seconds (ms)
-    });
-  };
+const Home = () => {
+  const [isSmallSize, setIsSmallSize] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallSize(window.innerWidth < 768); // Adjust the breakpoint as needed
+    };
+
+    // Initial check
+    handleResize();
+
+    // Attach the event listener
+    window.addEventListener("resize", handleResize);
+
+    // Clean up the event listener on unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
-    <div className="App">
-      <h1>React Toastify Example</h1>
-      <Button onClick={notify}>Show Notification</Button>
-
-      <ToastContainer />
-    </div>
+    <div>{isSmallSize ? <div>Small Screen</div> : <div>Large Screen</div>}</div>
   );
-}
+};
 
-export default App;
+export default Home;
