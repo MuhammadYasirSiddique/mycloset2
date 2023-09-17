@@ -137,8 +137,8 @@ const Product_Details = (item: IProps) => {
     }
   };
   return (
-    <main>
-      <div className="">
+    <main className="mx-5">
+      <div>
         <div className="flex flex-col lg:flex-row justify-center items-center lg:gap-x-6">
           <div className="" key={item.product.id}>
             <Image
@@ -150,7 +150,7 @@ const Product_Details = (item: IProps) => {
             />
           </div>
           <div>
-            <div>
+            <div className="">
               <p className="text-slate-500">Code: {item.product.id} </p>
               <p className="text-cyan-950 py-2 font-bold text-2xl">
                 {item.product.title}
