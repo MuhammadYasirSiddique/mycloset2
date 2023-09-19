@@ -166,7 +166,7 @@ const Product_Details = (item: IProps) => {
                   <>
                     <div className="mx-2" key={s}>
                       <button
-                        className={`bg-slate-200 rounded-full w-8 h-8 text-center ${
+                        className={`bg-slate-200 rounded-full w-8 h-8 ${
                           selectedSize === s ? "bg-slate-900 text-white" : ""
                         }`}
                         onClick={() => handleSizeSelection(s)}

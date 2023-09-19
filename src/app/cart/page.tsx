@@ -9,6 +9,7 @@ import Wraper from "@/Wraper/wraper";
 
 const Home = () => {
   const [isSmallSize, setIsSmallSize] = useState(false);
+  const [selectedItemIndex, setSelectedItemIndex] = useState<number>(-1); // Initialize with null
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,6 +31,7 @@ const Home = () => {
   const cartItems: Array<cart_Product> = useAppSelector(
     (state) => state.cart.items
   );
+
   if (cartItems.length == 0) {
     return (
       <Wraper>
@@ -38,11 +40,15 @@ const Home = () => {
     );
   }
 
-  console.log(cartItems);
-
   return (
     <div>
-      <div>{isSmallSize ? <SmallScreen /> : <LargeScreen />}</div>
+      <div>
+        {isSmallSize ? (
+          <SmallScreen />
+        ) : (
+          <LargeScreen cartItem={cartItems[0]} />
+        )}
+      </div>
     </div>
   );
 };

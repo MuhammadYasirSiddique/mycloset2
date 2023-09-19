@@ -12,21 +12,25 @@ import { removeProduct } from "@/redux/features/cartSlice";
 import CheckOut from "./CheckOut";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditCart from "./EditCartItem/EditCart";
+import { client } from "@/lib/SanityClient";
 
 type Props = {
   cartItem: cart_Product;
+  // onItemClick: (index: number) => void;
 };
 
-const CartPage = ({ cartItem }: any) => {
+const CartPage = ({ cartItem }: Props) => {
   const [loading, setLoading] = useState(false);
-  const [qty, setQty] = useState(0);
+  const [qty, setQty] = useState(cartItem ? cartItem.qty : 0);
   const dispatch = useAppDispatch();
-
-  // const dispatchCart = useDisptach();
 
   const cartItems: Array<cart_Product> = useAppSelector(
     (state) => state.cart.items
   );
+  // console.log(cartItem.size);
+
+  // const dispatchCart = useDisptach();
   // console.log(typeof cartItems);
 
   const totalItems = useAppSelector((state) => state.cart.totalQty);
@@ -54,18 +58,19 @@ const CartPage = ({ cartItem }: any) => {
     setLoading(false);
   };
 
-  const handleCartQty = async (newQty: number) => {
+  const handleCartQty = async (newQty: number, itemId: string) => {
     const newPrice = cartItem.unitPrice * newQty;
+    // console.log(newQty);
 
     try {
       if (newQty) {
         const res = await fetch("/api/cart", {
           method: "PUT",
           body: JSON.stringify({
-            product_id: cartItem._id,
+            product_id: itemId,
             qty: newQty,
             price: newPrice,
-            size: cartItem.size,
+            // size: cartItem.size,
           }),
         });
         if (!res.ok) {
@@ -77,20 +82,51 @@ const CartPage = ({ cartItem }: any) => {
     }
   };
 
-  const increment = () => {
-    toast.promise(handleCartQty(qty + 1), {
-      pending: "Updating Quantity",
-      success: "Quantity Updated in Cart",
-      error: "Failed to update quantity",
-    });
-    setQty(qty + 1);
-    dispatch(
-      cartAction.addToCart({
-        cart_product: cartItem,
-        quantity: 1,
-        size: cartItem.size,
-      })
-    );
+  const increment = (itemId: string, itemQty: number) => {
+    if (cartItem) {
+      // console.log(itemQty);
+      // console.log(itemId);
+      let newQty = itemQty + 1;
+
+      setQty(newQty);
+      // console.log(newQty);
+      toast.promise(handleCartQty(newQty, itemId), {
+        pending: "Updating Quantity",
+        success: "Quantity Updated in Cart",
+        error: "Failed to update quantity",
+      });
+
+      dispatch(
+        cartAction.updateQuantity({
+          productId: itemId,
+
+          newQty,
+        })
+      );
+    }
+  };
+
+  const decrement = (itemId: string, itemQty: number) => {
+    if (cartItem && itemQty > 1) {
+      // console.log(itemQty);
+      // console.log(itemId);
+      const newQty = itemQty - 1;
+      setQty(newQty);
+      // console.log(newQty);
+
+      toast.promise(handleCartQty(newQty, itemId), {
+        pending: "Updating Quantity",
+        success: "Quantity Updated in Cart",
+        error: "Failed to update quantity",
+      });
+
+      dispatch(
+        cartAction.updateQuantity({
+          productId: itemId,
+          newQty,
+        })
+      );
+    }
   };
 
   const totalOrderAmount = cartItems.reduce(
@@ -107,7 +143,7 @@ const CartPage = ({ cartItem }: any) => {
         <div className="flex lg:flex-nowrap">
           <div className="lg:w-3/4 w-full max-w-screen-lg rounded-lg h-fit bg-slate-100 shadow-lg overflow-x-auto border">
             <div className="grid grid-cols-8 text-center font-semibold py-2 border ">
-              {/* <span className="col-span-1">Code</span> */}
+              <span className="col-span-1">Code</span>
               <span className="col-span-1">Image</span>
               <span className="col-span-1">Item Title</span>
               <span className="col-span-1">Size</span>
@@ -115,31 +151,45 @@ const CartPage = ({ cartItem }: any) => {
               <span className="col-span-1">Price</span>
               <span className="col-span-1">Amount</span>
               <span className="col-span-1">Delete</span>
-              <span className="col-span-1">Edit</span>
+              {/* <span className="col-span-1">Edit</span> */}
             </div>
             <div className="border">
-              {cartItems.map((item) => {
+              {cartItems.map((item, index) => {
                 try {
                   return (
                     <div key={item._id}>
                       <div>
                         <div>
                           <div className="grid grid-cols-8 gap-2 px-2 text-center items-center justify-center">
-                            {/* <span className="col-span-1">{item._id}</span> */}
-                            <span className="col-span-1">
+                            <span className="col-span-1">{item._id}</span>
+                            <span className="col-span-1 ">
                               <Image
                                 className="py-2"
                                 src={item.image}
                                 alt={item.title}
-                                width={50}
-                                height={50}
+                                width={200}
+                                height={200}
                               />
                             </span>
                             <span className="col-span-1">{item.title}</span>
                             <span className="col-span-1">{item.size}</span>
-                            {/* <div className="flex items-center justify-center"> */}
-                            <span className="col-span-1">{item.qty}</span>{" "}
-                            {/* </div> */}
+                            <div className="flex items-center justify-center">
+                              <button
+                                className="bg-cyan-600 text-white rounded-l-lg  w-6 h-6"
+                                onClick={() => decrement(item._id, item.qty)}
+                              >
+                                -
+                              </button>
+                              <span className="col-span-1  border-t-1 border-cyan-700 px-2">
+                                {item.qty}
+                              </span>{" "}
+                              <button
+                                className="bg-cyan-600 text-white rounded-r-lg  w-6 h-6"
+                                onClick={() => increment(item._id, item.qty)}
+                              >
+                                +
+                              </button>
+                            </div>
                             <span className="col-span-1">{item.unitPrice}</span>
                             <span className="col-span-1">
                               {item.productPrice}
@@ -164,13 +214,10 @@ const CartPage = ({ cartItem }: any) => {
                               />
                             </span>{" "}
                             <ToastContainer />
-                            <span className="col-span-1 flex items-center justify-center">
-                              {/* Edit button */}
-                              <Button>Edit</Button>
-                            </span>
                           </div>
                         </div>
                       </div>
+                      <div className="bg-slate-300 h-0.5"></div>
                     </div>
                   );
                 } catch (error) {

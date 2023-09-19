@@ -99,30 +99,30 @@ const Navbar = ({ userId }: { userId: string }) => {
 
                   `}
       >
-        <ul className="md:flex md:justify-between  text-base text-center items-center">
+        <ul className="md:flex md:justify-between  text-base text-center items-center ">
           <li>
             {" "}
-            <a href="/category/Men" className="mx-4">
+            <a href="/category/Men" className="mx-4 hover:text-black ">
               {" "}
               Men
             </a>
           </li>
           <li>
             {" "}
-            <a href="/category/Women" className="mx-4">
+            <a href="/category/Women" className="mx-4 hover:text-black">
               {" "}
               Women
             </a>
           </li>
           <li>
             {" "}
-            <a href="/category/Kids" className="mx-4">
+            <a href="/category/Kids" className="mx-4 hover:text-black">
               {" "}
               Kids
             </a>
           </li>
           <li>
-            <a href="/category/Home" className="mx-4">
+            <a href="/category/Home" className="mx-4 hover:text-black">
               {" "}
               Home
             </a>
@@ -168,7 +168,7 @@ const Navbar = ({ userId }: { userId: string }) => {
             </li>
           ) : (
             // User is authenticated, show UserButton component
-            <li className="flex items-center justify-center md:ml-auto">
+            <li className="flex items-center justify-center md:ml-auto hover:scale-105">
               <UserButton afterSignOutUrl="/" />
             </li>
           )}
@@ -177,7 +177,7 @@ const Navbar = ({ userId }: { userId: string }) => {
         {/* <CartIcon /> */}
 
         <div
-          className={`flex items-center justify-center md:ml-auto ${
+          className={`flex items-center justify-center md:ml-auto hover:scale-105 ${
             isSmallScreen ? "w-full mt-2 md:mt-0" : ""
           }`}
         >

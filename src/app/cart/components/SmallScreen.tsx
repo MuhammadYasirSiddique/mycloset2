@@ -20,6 +20,7 @@ import { removeProduct } from "@/redux/features/cartSlice";
 import CheckOut from "./CheckOut";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import EditCart from "./EditCartItem/EditCart";
 
 type Props = {
   cartItem: cart_Product;
@@ -29,6 +30,18 @@ const CartPage = ({ cartItem }: any) => {
   const [loading, setLoading] = useState(false);
   const [qty, setQty] = useState(0);
   const dispatch = useAppDispatch();
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  // Function to open the edit pop-up
+  const openEditModal = () => {
+    setEditModalOpen(true);
+  };
+
+  // Function to close the edit pop-up
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+  };
 
   // const dispatchCart = useDisptach();
 
@@ -173,7 +186,7 @@ const CartPage = ({ cartItem }: any) => {
                                 </div>
                                 <div className="flex items-center justify-center mb-2 ml-auto">
                                   {/* Edit button */}
-                                  <Button>Edit</Button>
+                                  <Button onClick={openEditModal}>Edit</Button>
                                 </div>
                               </div>
                             </div>
@@ -189,6 +202,7 @@ const CartPage = ({ cartItem }: any) => {
                 }
               })}{" "}
             </div>
+
             <ToastContainer />
           </div>
           <div className="md:mx-2 mt-5   rounded-lg bg-slate-100 w-full md:w-1/4 shadow-lg border h-fit">
