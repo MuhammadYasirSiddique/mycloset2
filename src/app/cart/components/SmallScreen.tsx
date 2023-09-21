@@ -1,11 +1,3 @@
-// import React from "react";
-
-// const SmallScreen = () => {
-//   return <div>SmallScreen</div>;
-// };
-
-// export default SmallScreen;
-
 "use client";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";

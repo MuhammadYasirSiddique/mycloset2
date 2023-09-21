@@ -8,6 +8,7 @@ export default authMiddleware({
     "/api/cart/null",
     "/api/webhooks",
     "/studio/:path*",
+    "/register",
     // "/product/:path*",
     // "/api/cart/:path*",
     // "/api/cart",

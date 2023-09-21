@@ -5,8 +5,10 @@ import { ShoppingCart } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Toaster } from "react-hot-toast";
-import { UserButton, auth } from "@clerk/nextjs";
+import { UserButton, SignedIn,  SignedOut,  SignInButton, SignUpButton, } from "@clerk/nextjs";
 import { fetchData } from "@/redux/features/cartSlice";
+
+
 
 const Navbar = ({ userId }: { userId: string }) => {
   const [open, setOpen] = useState(false);
@@ -14,6 +16,9 @@ const Navbar = ({ userId }: { userId: string }) => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const totalqty = useAppSelector((state) => state.cart.totalQty);
   const dispatch = useAppDispatch();
+
+  
+  
 
   function setFixed() {
     if (window.scrollY >= 1) {
@@ -51,6 +56,7 @@ const Navbar = ({ userId }: { userId: string }) => {
       }
     };
   }, []);
+  console.log(SignedIn )
 
   return (
     <div
@@ -102,27 +108,27 @@ const Navbar = ({ userId }: { userId: string }) => {
         <ul className="md:flex md:justify-between  text-base text-center items-center ">
           <li>
             {" "}
-            <a href="/category/Men" className="mx-4 hover:text-black ">
+            <a href="/category/Men" className={` {mx-4 ${ fix? 'hover:text-white mx-4': 'hover:text-black mx-4'}`}>
               {" "}
               Men
             </a>
           </li>
           <li>
             {" "}
-            <a href="/category/Women" className="mx-4 hover:text-black">
+            <a href="/category/Women" className={` {mx-4 ${ fix? 'hover:text-white mx-4': 'hover:text-black mx-4'}`}>
               {" "}
               Women
             </a>
           </li>
           <li>
             {" "}
-            <a href="/category/Kids" className="mx-4 hover:text-black">
+            <a href="/category/Kids" className={` {mx-4 ${ fix? 'hover:text-white mx-4': 'hover:text-black mx-4' }`}>
               {" "}
               Kids
             </a>
           </li>
           <li>
-            <a href="/category/Home" className="mx-4 hover:text-black">
+            <a href="/category/Home" className={` { ${ fix? 'hover:text-white mx-4': 'hover:text-black mx-4'}`}>
               {" "}
               Home
             </a>
@@ -154,24 +160,41 @@ const Navbar = ({ userId }: { userId: string }) => {
               </div>
             </form>
           )}
-          {!auth ? (
-            // User is not authenticated, show Sign in link
+
+            {/* // User is authenticated, show UserButton component */}
+            <li className="flex items-center justify-center md:ml-auto hover:scale-105">
+                <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+            </li>
+
+
+            {/* // User is not authenticated, show Sign in link */}
             <li>
+            <SignedOut>
+              <div className={`${isSmallScreen ? 'items-center justify-center' : 'flex' }`}>
               <a
-                href="sign-in"
-                className={` md:px-4 block py-2 ${
+                href="/sign-in"
+                className={` md:px-4 block px-1 ${
                   fix ? "hover:text-white" : " hover:text-black"
                 }`}
               >
-                Sign in
+                
+               Sign-in
               </a>
+              <a
+                href="/register"
+                className={` md:px-4 block px-1 first-letter:${
+                  fix ? "hover:text-white" : " hover:text-black"
+                }`}
+              >
+                
+               Register
+              </a></div>
+
+            </SignedOut>
             </li>
-          ) : (
-            // User is authenticated, show UserButton component
-            <li className="flex items-center justify-center md:ml-auto hover:scale-105">
-              <UserButton afterSignOutUrl="/" />
-            </li>
-          )}
+
         </ul>
 
         {/* <CartIcon /> */}

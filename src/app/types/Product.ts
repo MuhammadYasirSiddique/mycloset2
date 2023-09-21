@@ -24,3 +24,11 @@ export interface Product {
   price: number;
   category: { category: string };
 }
+
+export interface SignedUpUser {
+  first_name: string;
+  last_name: string;
+  email_address: string;
+  password: string;
+  // Add other fields as needed
+}
