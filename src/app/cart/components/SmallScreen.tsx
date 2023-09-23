@@ -24,12 +24,16 @@ const CartPage = ({ cartItem }: any) => {
   const dispatch = useAppDispatch();
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [productIdToEdit, setProductIdToEdit] = useState<string>("");
+  const [priceToEdit, setPriceToEdit] = useState<number>(0);
+
 
   // Function to open the edit pop-up
-  const openEditModal = () => {
+  const openEditModal = (productId: string, unitPrice: number  ) => {
+    setProductIdToEdit(productId);
+    setPriceToEdit(unitPrice)
     setEditModalOpen(true);
   };
-
   // Function to close the edit pop-up
   const closeEditModal = () => {
     setEditModalOpen(false);
@@ -69,6 +73,8 @@ const CartPage = ({ cartItem }: any) => {
 
   const handleCartQty = async (newQty: number) => {
     const newPrice = cartItem.unitPrice * newQty;
+    console.log(newQty)
+    console.log(newPrice)
 
     try {
       if (newQty) {
@@ -178,7 +184,7 @@ const CartPage = ({ cartItem }: any) => {
                                 </div>
                                 <div className="flex items-center justify-center mb-2 ml-auto">
                                   {/* Edit button */}
-                                  <Button onClick={openEditModal}>Edit</Button>
+                                  <Button onClick={()=>openEditModal(item._id, item.unitPrice)}>Edit</Button>
                                 </div>
                               </div>
                             </div>
@@ -194,6 +200,12 @@ const CartPage = ({ cartItem }: any) => {
                 }
               })}{" "}
             </div>
+            {editModalOpen && (
+              <EditCart
+                onClose={closeEditModal}
+                productId={productIdToEdit}
+                unitPrice = {priceToEdit}  />
+)}
 
             <ToastContainer />
           </div>

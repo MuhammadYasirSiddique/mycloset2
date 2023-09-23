@@ -9,7 +9,7 @@ import Wraper from "@/Wraper/wraper";
 
 const Home = () => {
   const [isSmallSize, setIsSmallSize] = useState(false);
-  const [selectedItemIndex, setSelectedItemIndex] = useState<number>(-1); // Initialize with null
+  
 
   useEffect(() => {
     const handleResize = () => {

@@ -77,9 +77,11 @@ export const cartSlice = createSlice({
       const cartItem = state.items.find((item) => item._id === productId);
 
       if (cartItem) {
+        // Calculate the new product price based on the unit price and new quantity
+    const newProductPrice = cartItem.unitPrice * newQty;  
         // Update the quantity of the cart item
         cartItem.qty = newQty;
-
+        cartItem.productPrice =  newProductPrice
         // Update total quantity and total amount
         state.totalQty = state.items.reduce(
           (total, item) => total + item.qty,

@@ -1,40 +1,84 @@
 "use client";
 import React, { useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
+import { cartAction } from "@/redux/features/cartSlice";
+import { toast } from "react-toastify";
 
 interface EditCartItemProps {
   onClose: () => void;
-  productQty: number;
+  productId: string
+  unitPrice: number ;
 }
 
-const EditCartItem: React.FC<EditCartItemProps> = ({ onClose, productQty }) => {
-  const qtyForEdit = productQty;
-  // console.log(qtyForEdit);
+const EditCartItem: React.FC<EditCartItemProps> = ({ onClose, productId, unitPrice }) => {
   // State to track the edited quantity
-  // const qtyForEdit = useAppSelector((state) => {
-  //   // Use the productId to find the quantity of the specific item in the cart
-  //   const cartItem = state.cart.items.find((item) => item._id === productId);
-  //   return cartItem ? cartItem.qty : 0; // Default to 0 if the item is not found
-  // });
-  const [editedQty, setEditedQty] = useState(0);
-  const [editedSize, setEditedSize] = useState("");
+  const qtyForEdit = useAppSelector((state) => {
+    // Use the productId to find the quantity of the specific item in the cart
+    const cartItem = state.cart.items.find((item) => item._id === productId);
+    return cartItem ? cartItem.qty : 0; // Default to 0 if the item is not found
+  });
+
+  const dispatch = useAppDispatch();
+  const [newQty, setNewQty] = useState(qtyForEdit);
+
+  // const [editedSize, setEditedSize] = useState("");
 
   // Function to handle quantity change
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newQty = parseInt(e.target.value, 10);
-    setEditedQty(newQty);
-  };
-  const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newSize = parseInt(e.target.value, 10);
-    setEditedQty(newSize);
-  };
+    const editedQty = parseInt(e.target.value, 10);
+    setNewQty(editedQty);
 
-  // Function to save the edited quantity and close the pop-up
-  const saveEdit = () => {
+
+    
+  };
+  // const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const newSize = parseInt(e.target.value, 10);
+  //   setEditedQty(newSize);
+  // };
+
+  // Function to save the edited quantity and close the pop-up /////// newQty: number, itemId: string
+  const saveEdit = async () => {
     // You can implement the logic to update the cart item's quantity here
     // Example: call an API to update the quantity
-    // After updating, you can close the pop-up
-    onClose();
+     // After updating, you can close the pop-up
+     onClose();
+   
+     // Calculate the new total price after updating the quantity
+    const totalPrice = newQty * unitPrice;
+
+    // Dispatch an action to update the Redux store with the new total price
+
+    dispatch(
+      cartAction.updateQuantity({
+        productId: productId,
+        newQty: newQty ,
+
+      })
+    )
+  
+    
+    try {
+      if (newQty) {
+        const res = await fetch("/api/cart", {
+          method: "PUT",
+          body: JSON.stringify({
+            product_id: productId,
+            qty: newQty,
+            price: totalPrice,
+            // size: cartItem.size,
+          }),
+          
+        });
+        if (!res.ok) {
+          throw new Error("Failed to Update Qty in cart");
+        }
+        
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  ;
+   
   };
 
   return (
@@ -49,11 +93,11 @@ const EditCartItem: React.FC<EditCartItemProps> = ({ onClose, productQty }) => {
             type="number"
             id="editedQty"
             className="border border-gray-300 rounded w-full px-3 py-2"
-            value={editedQty}
+            value={newQty}
             onChange={handleQuantityChange}
           />
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label htmlFor="editedSize" className="block mb-2">
             New Size:
           </label>
@@ -64,11 +108,21 @@ const EditCartItem: React.FC<EditCartItemProps> = ({ onClose, productQty }) => {
             value={editedQty}
             onChange={handleSizeChange}
           />
-        </div>
+        </div> */}
         <div className="flex justify-end">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            onClick={saveEdit}
+            onClick={() =>{
+              toast.promise(
+                saveEdit(),
+                {
+                  pending: "Updating quantity",
+                  success: "Quantity updated",
+                  error: "Failed to update quantity",
+                }
+              );
+            }
+          }
           >
             Update
           </button>

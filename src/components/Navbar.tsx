@@ -56,7 +56,7 @@ const Navbar = ({ userId }: { userId: string }) => {
       }
     };
   }, []);
-  console.log(SignedIn )
+  // console.log(SignedIn )
 
   return (
     <div
@@ -183,7 +183,7 @@ const Navbar = ({ userId }: { userId: string }) => {
                Sign-in
               </a>
               <a
-                href="/register"
+                href="/sign-up"
                 className={` md:px-4 block px-1 first-letter:${
                   fix ? "hover:text-white" : " hover:text-black"
                 }`}

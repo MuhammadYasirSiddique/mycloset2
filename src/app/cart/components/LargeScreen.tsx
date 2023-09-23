@@ -15,6 +15,12 @@ import "react-toastify/dist/ReactToastify.css";
 import EditCart from "./EditCartItem/EditCart";
 import { client } from "@/lib/SanityClient";
 
+// Create a loader component
+const Loader = () => {
+  return <div>Loading...</div>; // Design your loader here
+};
+
+
 type Props = {
   cartItem: cart_Product;
   // onItemClick: (index: number) => void;
@@ -23,12 +29,14 @@ type Props = {
 const CartPage = ({ cartItem }: Props) => {
   const [loading, setLoading] = useState(false);
   const [qty, setQty] = useState(cartItem ? cartItem.qty : 0);
+  const [unitPrice, setUnitprice] = useState(cartItem ? cartItem.unitPrice : 0);
   const dispatch = useAppDispatch();
+  
 
   const cartItems: Array<cart_Product> = useAppSelector(
     (state) => state.cart.items
   );
-  // console.log(cartItem.size);
+  // console.log(cartItems);
 
   // const dispatchCart = useDisptach();
   // console.log(typeof cartItems);
@@ -58,10 +66,11 @@ const CartPage = ({ cartItem }: Props) => {
     setLoading(false);
   };
 
-  const handleCartQty = async (newQty: number, itemId: string) => {
-    const newPrice = cartItem.unitPrice * newQty;
-    // console.log(newQty);
-
+  const handleCartQty = async (newQty: number, itemId: string, unitPrice: number) => {
+    let newPrice = 0;
+    newPrice = unitPrice * newQty;
+    console.log(newQty);
+console.log(unitPrice)
     try {
       if (newQty) {
         const res = await fetch("/api/cart", {
@@ -82,15 +91,17 @@ const CartPage = ({ cartItem }: Props) => {
     }
   };
 
-  const increment = (itemId: string, itemQty: number) => {
+  const increment = (itemId: string, itemQty: number, UnitPrice: number) => {
     if (cartItem) {
       // console.log(itemQty);
-      // console.log(itemId);
       let newQty = itemQty + 1;
-
+      let unitPrice = 0
+      unitPrice = UnitPrice
+      // console.log(unitPrice);
+      setUnitprice(unitPrice)
       setQty(newQty);
       // console.log(newQty);
-      toast.promise(handleCartQty(newQty, itemId), {
+      toast.promise(handleCartQty(newQty, itemId, unitPrice), {
         pending: "Updating Quantity",
         success: "Quantity Updated in Cart",
         error: "Failed to update quantity",
@@ -106,15 +117,18 @@ const CartPage = ({ cartItem }: Props) => {
     }
   };
 
-  const decrement = (itemId: string, itemQty: number) => {
+  const decrement = (itemId: string, itemQty: number, UnitPrice: number) => {
     if (cartItem && itemQty > 1) {
       // console.log(itemQty);
       // console.log(itemId);
       const newQty = itemQty - 1;
+      let unitPrice = 0
+      unitPrice = UnitPrice
+      // console.log(unitPrice);
       setQty(newQty);
       // console.log(newQty);
 
-      toast.promise(handleCartQty(newQty, itemId), {
+      toast.promise(handleCartQty(newQty, itemId, unitPrice), {
         pending: "Updating Quantity",
         success: "Quantity Updated in Cart",
         error: "Failed to update quantity",
@@ -176,7 +190,7 @@ const CartPage = ({ cartItem }: Props) => {
                             <div className="flex items-center justify-center">
                               <button
                                 className="bg-cyan-600 text-white rounded-l-lg  w-6 h-6"
-                                onClick={() => decrement(item._id, item.qty)}
+                                onClick={() => decrement(item._id, item.qty, item.unitPrice)}
                               >
                                 -
                               </button>
@@ -185,7 +199,7 @@ const CartPage = ({ cartItem }: Props) => {
                               </span>{" "}
                               <button
                                 className="bg-cyan-600 text-white rounded-r-lg  w-6 h-6"
-                                onClick={() => increment(item._id, item.qty)}
+                                onClick={() => increment(item._id, item.qty, item.unitPrice)}
                               >
                                 +
                               </button>
