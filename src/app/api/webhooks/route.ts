@@ -1,9 +1,10 @@
 import Stripe from "stripe";
-import { db, cartTable } from "@/lib/drizzle";
+import { db, cartTable, salesTable } from "@/lib/drizzle";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
+
 export async function POST(req: any, res: any) {
   // console.log(endpointSecret + "End Point Secret");
 
@@ -50,14 +51,27 @@ export async function POST(req: any, res: any) {
       // @ts-ignore
       const userId = customerData.metadata.userId;
 
+
+      // Fetch cart items for the user
+      const cartItems = await db.select().from(cartTable).where(eq(cartTable.user_id, userId));
+
+      // Insert cart items into Sales table
+      for (const cartItem of cartItems) {
+        await db.insert(salesTable).values(cartItem).execute()
+      }
+
+
       await db.delete(cartTable).where(eq(cartTable.user_id, userId));
 
-      console.log("payment success-----------------------");
+      console.log("Payment success and cart items transferred to Sales table");
+
+      // console.log("payment success-----------------------");
       //   , session);
       //   const line_Items = await stripe.checkout.sessions.listLineItems(
       //     // @ts-ignore
       //     event.data.object!._id
       //   );
+
 
       return new Response("Payment Confirmation Router Reciept", {
         status: 200,
