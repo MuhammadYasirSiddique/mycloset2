@@ -1,24 +1,18 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Product, cart_Product } from "@/app/types/Product";
+import {  cart_Product } from "@/app/types/Product";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import Link from "next/link";
-import { Provider } from "react-redux";
-import { cartAction } from "@/redux/features/cartSlice";
 import { removeProduct } from "@/redux/features/cartSlice";
 import CheckOut from "./CheckOut";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EditCart from "./EditCartItem/EditCart";
 
-type Props = {
-  cartItem: cart_Product;
-};
 
-const CartPage = ({ cartItem }: any) => {
+const CartPage = () => {
   const [loading, setLoading] = useState(false);
   const [qty, setQty] = useState(0);
   const dispatch = useAppDispatch();
@@ -71,46 +65,6 @@ const CartPage = ({ cartItem }: any) => {
     setLoading(false);
   };
 
-  const handleCartQty = async (newQty: number) => {
-    const newPrice = cartItem.unitPrice * newQty;
-    console.log(newQty)
-    console.log(newPrice)
-
-    try {
-      if (newQty) {
-        const res = await fetch("/api/cart", {
-          method: "PUT",
-          body: JSON.stringify({
-            product_id: cartItem._id,
-            qty: newQty,
-            price: newPrice,
-            size: cartItem.size,
-          }),
-        });
-        if (!res.ok) {
-          throw new Error("Failed to Update Qty in cart");
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const increment = () => {
-    toast.promise(handleCartQty(qty + 1), {
-      pending: "Updating Quantity",
-      success: "Quantity Updated in Cart",
-      error: "Failed to update quantity",
-    });
-    setQty(qty + 1);
-    dispatch(
-      cartAction.addToCart({
-        cart_product: cartItem,
-        quantity: 1,
-        size: cartItem.size,
-      })
-    );
-  };
 
   const totalOrderAmount = cartItems.reduce(
     (total, item) => total + item.productPrice,

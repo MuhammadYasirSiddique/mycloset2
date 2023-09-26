@@ -6,10 +6,18 @@ import LargeScreen from "./components/LargeScreen";
 import { useAppSelector } from "@/redux/store";
 import { cart_Product } from "../types/Product";
 import Wraper from "@/Wraper/wraper";
+import Loading from "../category/components/Loading";
 
 const Home = () => {
+  let isLoading = true
   const [isSmallSize, setIsSmallSize] = useState(false);
-  
+  const cartItems: Array<cart_Product> = useAppSelector(
+    (state) => state.cart.items
+  );
+
+   isLoading = useAppSelector((state) => state.cart.isLoading);
+
+console.log(isLoading)
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,25 +36,35 @@ const Home = () => {
     };
   }, []);
 
-  const cartItems: Array<cart_Product> = useAppSelector(
-    (state) => state.cart.items
-  );
 
-  if (cartItems.length == 0) {
+
+  
+  
+
+
+  // Display loader while loading is true
+  if (isLoading) {
+    return <Loading />;
+  }
+
+
+  
+  if (cartItems.length == 0 ) {
     return (
       <Wraper>
         <EmptyCart />
       </Wraper>
     );
+
   }
 
   return (
     <div>
       <div>
         {isSmallSize ? (
-          <SmallScreen />
+          <SmallScreen  />
         ) : (
-          <LargeScreen cartItem={cartItems[0]} />
+          <LargeScreen  />
         )}
       </div>
     </div>

@@ -63,7 +63,7 @@ export const POST = async (req: NextRequest) => {
         phone_number_collection: {
           enabled: true,
         },
-        success_url: `${req.headers.get("origin")}/success`,
+        success_url: `${req.headers.get("origin")}/success?success=true`,
         cancel_url: `${req.headers.get("origin")}/cart`,
       });
       return NextResponse.json({ session });

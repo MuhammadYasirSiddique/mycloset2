@@ -58,6 +58,7 @@ export async function POST(req: any, res: any) {
       // Insert cart items into Sales table
       for (const cartItem of cartItems) {
         await db.insert(salesTable).values(cartItem).execute()
+        // await db.insert(salesTable).
       }
 
 
@@ -78,11 +79,11 @@ export async function POST(req: any, res: any) {
       });
     } else {
       res.setHeader("Allow", "POST");
-      // res.status(405).end("Method Not Allowed");
+      res.status(405).end("Method Not Allowed");
     }
   } catch (err: any) {
     console.log("Error in webhook----------", err);
-    // res.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
 }

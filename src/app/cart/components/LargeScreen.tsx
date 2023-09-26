@@ -1,38 +1,23 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Product, cart_Product } from "@/app/types/Product";
+import { cart_Product } from "@/app/types/Product";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import Link from "next/link";
-import { Provider } from "react-redux";
 import { cartAction } from "@/redux/features/cartSlice";
 import { removeProduct } from "@/redux/features/cartSlice";
 import CheckOut from "./CheckOut";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import EditCart from "./EditCartItem/EditCart";
-import { client } from "@/lib/SanityClient";
-
-// Create a loader component
-const Loader = () => {
-  return <div>Loading...</div>; // Design your loader here
-};
 
 
-type Props = {
-  cartItem: cart_Product;
-  // onItemClick: (index: number) => void;
-};
 
-const CartPage = ({ cartItem }: Props) => {
+const CartPage = () => {
   const [loading, setLoading] = useState(false);
-  const [qty, setQty] = useState(cartItem ? cartItem.qty : 0);
-  const [unitPrice, setUnitprice] = useState(cartItem ? cartItem.unitPrice : 0);
+ 
   const dispatch = useAppDispatch();
   
-
+  
   const cartItems: Array<cart_Product> = useAppSelector(
     (state) => state.cart.items
   );
@@ -45,15 +30,15 @@ const CartPage = ({ cartItem }: Props) => {
   const totalAmount = useAppSelector((state) => state.cart.totalAmt);
 
   const handleRemoveFromCart = async (productId: string) => {
-    setLoading(true);
-
+    // setLoading(true);
+    // console.log("before"+loading)
     try {
       const response = await fetch(`/api/cart?product_id=${productId}`, {
         method: "DELETE",
       });
 
       if (response.ok) {
-        // Item removed successfully, you can update your cart state or UI here
+        // Item removed successfully, update cart state or UI here
         dispatch(removeProduct(productId));
         console.log("Item removed from cart");
       } else {
@@ -64,6 +49,7 @@ const CartPage = ({ cartItem }: Props) => {
     }
 
     setLoading(false);
+    
   };
 
   const handleCartQty = async (newQty: number, itemId: string, unitPrice: number) => {
@@ -92,14 +78,14 @@ console.log(unitPrice)
   };
 
   const increment = (itemId: string, itemQty: number, UnitPrice: number) => {
-    if (cartItem) {
+   
       // console.log(itemQty);
       let newQty = itemQty + 1;
       let unitPrice = 0
       unitPrice = UnitPrice
       // console.log(unitPrice);
-      setUnitprice(unitPrice)
-      setQty(newQty);
+      // setUnitprice(unitPrice)
+      // setQty(newQty);
       // console.log(newQty);
       toast.promise(handleCartQty(newQty, itemId, unitPrice), {
         pending: "Updating Quantity",
@@ -114,18 +100,18 @@ console.log(unitPrice)
           newQty,
         })
       );
-    }
+    
   };
 
   const decrement = (itemId: string, itemQty: number, UnitPrice: number) => {
-    if (cartItem && itemQty > 1) {
+    if ( itemQty > 1) {
       // console.log(itemQty);
       // console.log(itemId);
       const newQty = itemQty - 1;
       let unitPrice = 0
       unitPrice = UnitPrice
       // console.log(unitPrice);
-      setQty(newQty);
+      // setQty(newQty);
       // console.log(newQty);
 
       toast.promise(handleCartQty(newQty, itemId, unitPrice), {
@@ -151,6 +137,7 @@ console.log(unitPrice)
 
   return (
     <>
+    
       <div className="p-6 bg">
         <h1 className="text-2xl font-semibold mb-4">Shoping Cart</h1>
 
@@ -262,6 +249,7 @@ console.log(unitPrice)
           </div>
         </div>
       </div>
+  
     </>
   );
 };

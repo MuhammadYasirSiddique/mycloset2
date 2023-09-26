@@ -28,6 +28,7 @@ export const salesTable = pgTable("sales", {
   price: integer("price").notNull(),
   qty: integer("qty").notNull(),
   total_price: integer("total_price").notNull(),
+  // payment_id: varchar("paymnt_id", { length: 255 }).notNull(),
 });
 
 

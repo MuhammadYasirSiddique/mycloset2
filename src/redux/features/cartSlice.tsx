@@ -23,6 +23,7 @@ export const fetchData = createAsyncThunk(
   "cart/fetchdata",
   async (userId: string) => {
     const res = await fetch(`/api/cart/${userId}`);
+    
     if (!res.ok) {
       console.log("Failed to Fetch DATA");
     }
